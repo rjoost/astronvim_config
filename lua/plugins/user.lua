@@ -69,7 +69,23 @@ return {
       )
     end,
   },
-
+  {
+    "neovim/nvim-lspconfig",
+    -- if you already have an opts table, just add/merge the relevant sections
+    opts = {
+      servers = {
+        lua_ls = {
+          settings = {
+            Lua = {
+              diagnostics = {
+                globals = { "vim" },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
   -- Override jay-babu/mason-nvim-dap.nvim
   -- to fix issue with expand path
   -- Add DAP configuration
@@ -110,7 +126,6 @@ return {
       },
       handlers = {
         python = function(source_name)
-          return  -- Skip default handler since we're configuring manually
         end,
       },
     },
@@ -121,8 +136,27 @@ return {
     -- overrides `require("mason-lspconfig").setup(...)`
     opts = {
       ensure_installed = {
-        "lua_ls",
-        -- add more arguments for adding more language servers
+        -- Python
+        "pyright",           -- Fast Python LSP
+        -- Shell scripting
+        "bashls",           -- Bash/Shell scripting
+        
+        -- Infrastructure/Cloud
+        "docker_compose_language_service", -- Docker compose
+        "dockerls",         -- Dockerfile
+        "terraformls",
+        "yamlls",           -- YAML (useful for Kubernetes, Ansible)
+        "ansiblels",        -- Ansible specific
+        "azure_pipelines_ls", -- Azure Pipeline/GitHub Actions YAML
+        
+        -- Web/Config formats
+        "jsonls",           -- JSON
+        "lua_ls",           -- Lua
+        "taplo",           -- TOML files
+        
+        -- Cloud vendor specific
+        -- "aws_cloudformation_yaml_ls", -- AWS CloudFormation
+        -- "cfn_lsp",         -- Another CloudFormation LSP
       },
     },
   },
@@ -311,35 +345,44 @@ return {
           null_ls.builtins.formatting.black.with {
             extra_args = { "--line-length=120" },
           },
+
+          null_ls.builtins.diagnostics.pylint.with ({
+            extra_args = {
+              "--max-line-length=120",
+              "--disable=C0111",  -- disable missing docstring warning
+              "--disable=missing-docstring",
+            },
+          }),
+
           -- YAML Formatter - stricter than Prettier
-          null_ls.builtins.formatting.yamlfmt,
-	  -- Prettier Formatter
-          null_ls.builtins.formatting.prettier.with({
+          null_ls.builtins.formatting.yamlfmt.with {
+            extra_args = { "--line-length=120" },
+          },
+	        -- Prettier Formatter
+          null_ls.builtins.formatting.prettier.with ({
             prefer_local = true,
             dynamic_command = function(_)
               return "prettier"
             end,
-            extra_args = { 
+            extra_args = {
               "--parser=yaml",  -- corrected from filetypes=yaml
-              "--no-semi", 
+              "--no-semi",
               "--single-quote",  -- corrected from single-quote
-              "--jsx-single-quote", 
-              "--tab-width=2", 
-              "--prose-wrap=always" 
+              "--jsx-single-quote",
+              "--tab-width=2",
+              "--line-length=120",
+              "--prose-wrap=always"
             },
           }),
 
           -- Diagnostics
           -- null_ls.builtins.formatting.yamlfmt, -- stricter than ansible-lint
           null_ls.builtins.diagnostics.yamllint,
-          null_ls.builtins.diagnostics.flake8,
-          -- null_ls.builtins.diagnostics.ansible_lint, -- for Ansible linting
-          -- null_ls.builtins.diagnostics.ansiblelint,
           null_ls.builtins.diagnostics.jsonlint,
           null_ls.builtins.diagnostics.cfn_lint, -- for CloudFormation/AWS
 
           -- Code Actions
-          null_ls.builtins.code_actions.gitsigns,
+          null_ls.builtins.code_actions.gitsigns
         },
       }
     end,
@@ -413,5 +456,23 @@ return {
         parser_install_dir = vim.fn.stdpath "data" .. "/treesitter_parsers",
       }
     end,
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
+    end,
+  },
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function()
+      require("copilot_cmp").setup()
+    end,
+    dependencies = { "zbirenbaum/copilot.lua" },
   },
 }
