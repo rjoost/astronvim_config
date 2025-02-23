@@ -36,7 +36,7 @@ return {
         breakindent = true,
         tabstop = 2,
         shiftwidth = 2,
-        expandtab = false,
+        expandtab = true,
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
