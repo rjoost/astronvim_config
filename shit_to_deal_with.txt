@@ -52,4 +52,11 @@ The following node executables are shadowed by other commands earlier in your PA
   That's it. Steps 4–5 assume you're setting up .zprofile/.zshrc fresh — if they already exist on the new machine, just append those lines.
 
 
-
+# THEME?
+for iterm
+# USGC BASH PROMPT
+if [[ $- == *i* ]]; then
+  export CLICOLOR=1
+  export LSCOLORS=GxFxCxDxBxegedabagaced
+  export PS1="\[$(tput setaf 7)\]❬\h❭ \[$(tput setaf 2)\]\W\[$(tput setaf 1)\] ●\[$(tput sgr0)\] "
+fi
