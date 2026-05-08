@@ -1,0 +1,40 @@
+---@type LazySpec
+return {
+  "catppuccin/nvim",
+  name = "catppuccin",
+  opts = {
+    flavour = "mocha",
+    background = { light = "latte", dark = "mocha" },
+    transparent_background = false,
+    term_colors = true,
+    integrations = {
+      aerial = true,
+      alpha = true,
+      cmp = true,
+      dap = true,
+      dap_ui = true,
+      gitsigns = true,
+      illuminate = { enabled = true },
+      indent_blankline = { enabled = true },
+      lsp_trouble = true,
+      mason = true,
+      mini = { enabled = true },
+      native_lsp = {
+        enabled = true,
+        underlines = {
+          errors = { "undercurl" },
+          hints = { "undercurl" },
+          warnings = { "undercurl" },
+          information = { "undercurl" },
+        },
+      },
+      neotree = true,
+      noice = true,
+      notify = true,
+      semantic_tokens = true,
+      telescope = { enabled = true },
+      treesitter = true,
+      which_key = true,
+    },
+  },
+}

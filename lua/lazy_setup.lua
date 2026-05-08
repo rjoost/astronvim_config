@@ -15,8 +15,10 @@ require("lazy").setup({
   { import = "plugins" },
 } --[[@as LazySpec]], {
   -- Configure any other `lazy.nvim` configuration options here
-  install = { colorscheme = { "astrotheme", "habamax", "monokai-pro" } },
-  -- checker = { enabled = true },
+  -- Increased from default 10: needed when many AstroCommunity packs are imported at once
+  max_rounds = 30,
+  install = { colorscheme = { "catppuccin", "habamax" } },
+  -- checker = { enabled = true }, -- auto-update checker disabled; run :Lazy update manually
   ui = { backdrop = 100 },
   performance = {
     rtp = {
@@ -29,5 +31,8 @@ require("lazy").setup({
         "zipPlugin",
       },
     },
+  },
+  git = {
+    cmd = "/opt/homebrew/bin/git", -- Use the result of `which git` in your terminal
   },
 } --[[@as LazyConfig]])

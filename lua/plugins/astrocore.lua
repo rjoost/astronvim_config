@@ -9,11 +9,12 @@ return {
   ---@type AstroCoreOpts
   opts = {
     -- Configure core features of AstroNvim
+    -- joost for mac mini m4 pro, 48gb memory
     features = {
-      large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
-      autopairs = false, -- enable autopairs at start
+      large_buf = { size = 1024 * 1024 * 2, lines = 50000 }, -- 2MB / 50k lines: disable treesitter etc. on large files
+      autopairs = false, -- disable autopairs at start
       cmp = true, -- enable completion at start
-      diagnostics_mode = 3, -- diagnostic mode on start (0 = off, 1 = no signs/virtual text, 2 = no virtual text, 3 = on)
+      diagnostics_mode = 3,  -- 3 = fully on
       highlighturl = true, -- highlight URLs at start
       notifications = true, -- enable notifications at start
     },
@@ -25,18 +26,34 @@ return {
     -- vim options can be configured here
     options = {
       opt = { -- vim.opt.<key>
-        relativenumber = false, -- sets vim.opt.relativenumber
-        number = false, -- sets vim.opt.number
-        spell = false, -- sets vim.opt.spell
-        signcolumn = "yes", -- sets vim.opt.signcolumn to yes
-        wrap = true, -- sets vim.opt.wrap
-        -- joost
+        relativenumber = false,
+        number = false,
+        spell = false,
+        signcolumn = "yes",
+        wrap = true,
         ignorecase = true,
         hlsearch = false,
         breakindent = true,
         tabstop = 2,
         shiftwidth = 2,
         expandtab = true,
+        guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20",
+        cursorline = true,
+        termguicolors = true,
+        list = true,
+        listchars = "tab:▸·,trail:·,nbsp:·",
+        scrolloff = 8,
+        incsearch = true,
+        smartcase = true,
+        wildmenu = true,
+        wildoptions = "pum",
+        jumpoptions = "stack",
+        formatoptions = "tcqrn1",
+        clipboard = "unnamedplus",
+        completeopt = "menu,menuone,noselect",
+        lazyredraw = false,  -- noice.nvim breaks with lazyredraw=true
+        updatetime = 300,
+        cmdheight = 0,  -- noice.nvim uses a float
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
@@ -64,6 +81,11 @@ return {
           end,
           desc = "Close buffer from tabline",
         },
+
+        -- Neotest
+        ["<Leader>nn"] = { function() require("neotest").run.run() end, desc = "Run nearest test" },
+        ["<Leader>nf"] = { function() require("neotest").run.run(vim.fn.expand "%") end, desc = "Run all tests in file" },
+        ["<Leader>no"] = { function() require("neotest").output_panel.toggle() end, desc = "Toggle test output panel" },
 
         -- tables with just a `desc` key will be registered with which-key if it's installed
         -- this is useful for naming menus
